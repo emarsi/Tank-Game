@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 10f;
 
+    int damage = 5;
+
     void FixedUpdate()
     {
         //applies force to bullet
@@ -16,6 +18,12 @@ public class Projectile : MonoBehaviour
     {
         GameObject collisionGameObject = collision.gameObject;
         string selfName = gameObject.name;
+        
+        //deal damage to target
+        if (collisionGameObject.GetComponent<PlayerHealth>() != null)
+        {
+            collisionGameObject.GetComponent<PlayerHealth>().TakeDamage(damage);
+        }
 
         //destroy self
         Destroy(gameObject);

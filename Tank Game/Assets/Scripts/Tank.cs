@@ -36,6 +36,9 @@ public class Tank : MonoBehaviour
 
     public TMP_Text turnText;
 
+    //track if projectile is active to see if players can move yet
+    public bool shotActive = false;
+
     void Start()
     {
         //set gas meters
@@ -49,106 +52,115 @@ public class Tank : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //player 1 controls
-        if (playerOneTurn)
+        //players may only act if a shot is not active (must wait to see where bullet hits)
+        if (!shotActive)
         {
-            //player 1 turret up/down movement
-            if (Input.GetKey("w")) //up
+            //player 1 controls
+            if (playerOneTurn)
             {
-                if (gun1.transform.rotation.z < 1)
+                //player 1 turret up/down movement
+                if (Input.GetKey("w")) //up
                 {
-                    gun1.transform.Rotate(0, 0, rotateSpeed, Space.Self);
+                    if (gun1.transform.rotation.z < 1)
+                    {
+                        gun1.transform.Rotate(0, 0, rotateSpeed, Space.Self);
+                    }
                 }
-            }
-            if (Input.GetKey("s")) //down
-            {
-                if (gun1.transform.rotation.z > 0)
+                if (Input.GetKey("s")) //down
                 {
-                    gun1.transform.Rotate(0, 0, -1 * rotateSpeed, Space.Self);
+                    if (gun1.transform.rotation.z > 0)
+                    {
+                        gun1.transform.Rotate(0, 0, -1 * rotateSpeed, Space.Self);
+                    }
                 }
-            }
 
-            //player needs gas left to move
-            if (moveTime > 0)
-            {
-                //player 1 left and right movement
-                if (Input.GetKey("d")) //right
+                //player needs gas left to move
+                if (moveTime > 0)
                 {
-                    direction = 1;
-                    UseGas();
+                    //player 1 left and right movement
+                    if (Input.GetKey("d")) //right
+                    {
+                        direction = 1;
+                        UseGas();
+                    }
+                    else if (Input.GetKey("a")) //left
+                    {
+                        direction = -1;
+                        UseGas();
+                    }
+                    else //no input
+                    {
+                        direction = 0;
+                    }
                 }
-                else if (Input.GetKey("a")) //left
-                {
-                    direction = -1;
-                    UseGas();
-                }
-                else //no input
+                else //out of gas
                 {
                     direction = 0;
                 }
             }
-            else //out of gas
+            else if (!playerOneTurn)
             {
-                direction = 0;
-            }
-        }
-        else if (!playerOneTurn)
-        {
-            //player 2 turret up/down movement
-            if (Input.GetKey("k")) //down
-            {
-                if (gun2.transform.rotation.z < 1)
+                //player 2 turret up/down movement
+                if (Input.GetKey("k")) //down
                 {
-                    gun2.transform.Rotate(0, 0, rotateSpeed, Space.Self);
+                    if (gun2.transform.rotation.z < 1)
+                    {
+                        gun2.transform.Rotate(0, 0, rotateSpeed, Space.Self);
+                    }
                 }
-            }
-            if (Input.GetKey("i")) //up
-            {
-                if (gun2.transform.rotation.z > 0)
+                if (Input.GetKey("i")) //up
                 {
-                    gun2.transform.Rotate(0, 0, -1 * rotateSpeed, Space.Self);
+                    if (gun2.transform.rotation.z > 0)
+                    {
+                        gun2.transform.Rotate(0, 0, -1 * rotateSpeed, Space.Self);
+                    }
                 }
-            }
 
-            //player needs gas left to move
-            if (moveTime > 0)
-            {
-                //player 1 left and right movement
-                if (Input.GetKey("l")) //right
+                //player needs gas left to move
+                if (moveTime > 0)
                 {
-                    direction = 1;
-                    UseGas();
+                    //player 1 left and right movement
+                    if (Input.GetKey("l")) //right
+                    {
+                        direction = 1;
+                        UseGas();
+                    }
+                    else if (Input.GetKey("j")) //left
+                    {
+                        direction = -1;
+                        UseGas();
+                    }
+                    else //no input
+                    {
+                        direction = 0;
+                    }
                 }
-                else if (Input.GetKey("j")) //left
-                {
-                    direction = -1;
-                    UseGas();
-                }
-                else //no input
+                else //out of gas
                 {
                     direction = 0;
                 }
             }
-            else //out of gas
+
+            //shoot 
+            if (Input.GetKeyDown("space"))
             {
-                direction = 0;
+                Shoot();
+                //cycle turn
+                playerOneTurn = !playerOneTurn;
+
+                //set gas back to full
+                moveTime = 3f;
+                playerOneGasBar.value = moveTime;
+                playerTwoGasBar.value = moveTime;
+
+                UpdateTurn();
             }
         }
-
-        //shoot 
-        if (Input.GetKeyDown("space"))
+        else //stop any current movement while shot is active
         {
-            Shoot();
-            //cycle turn
-            playerOneTurn = !playerOneTurn;
-
-            //set gas back to full
-            moveTime = 3f;
-            playerOneGasBar.value = moveTime;
-            playerTwoGasBar.value = moveTime;
-
-            UpdateTurn();
+            direction = 0;
         }
+
     }
 
     void FixedUpdate()
@@ -176,6 +188,7 @@ public class Tank : MonoBehaviour
         {
             Instantiate(bullet, firePoint2.position, firePoint2.rotation);
         }
+        shotActive = true;
     }
 
     void UpdateTurn()

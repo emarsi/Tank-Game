@@ -8,6 +8,14 @@ public class Projectile : MonoBehaviour
 
     int damage = 5;
 
+    //access tank controller script
+    Tank tank;
+
+    void Awake()
+    {
+        tank = GameObject.Find("Tank 1").GetComponent<Tank>();
+    }
+
     void FixedUpdate()
     {
         //applies force to bullet
@@ -27,6 +35,9 @@ public class Projectile : MonoBehaviour
 
         //destroy self
         Destroy(gameObject);
+
+        //set shot to inactive so players may move
+        tank.shotActive = false;
 
         //TODO create big explosion
     }

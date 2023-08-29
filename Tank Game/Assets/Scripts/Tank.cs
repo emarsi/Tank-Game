@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Tank : MonoBehaviour
 {
@@ -24,10 +25,26 @@ public class Tank : MonoBehaviour
 
     float direction = 0;
 
+    //moveTime drops available "gas" as player moves
+    float moveTime = 3f;
+
+    public Slider playerOneGasBar;
+    public Slider playerTwoGasBar;
+
     //track player turn
     bool playerOneTurn = true;
 
     public TMP_Text turnText;
+
+    void Start()
+    {
+        //set gas meters
+        playerOneGasBar.maxValue = moveTime;
+        playerOneGasBar.value = moveTime;
+
+        playerTwoGasBar.maxValue = moveTime;
+        playerTwoGasBar.value = moveTime;
+    }
 
     // Update is called once per frame
     void Update()
@@ -51,16 +68,26 @@ public class Tank : MonoBehaviour
                 }
             }
 
-            //player 1 left and right movement
-            if (Input.GetKey("d")) //right
+            //player needs gas left to move
+            if (moveTime > 0)
             {
-                direction = 1;
+                //player 1 left and right movement
+                if (Input.GetKey("d")) //right
+                {
+                    direction = 1;
+                    UseGas();
+                }
+                else if (Input.GetKey("a")) //left
+                {
+                    direction = -1;
+                    UseGas();
+                }
+                else //no input
+                {
+                    direction = 0;
+                }
             }
-            else if (Input.GetKey("a")) //left
-            {
-                direction = -1;
-            }
-            else //no input
+            else //out of gas
             {
                 direction = 0;
             }
@@ -83,16 +110,26 @@ public class Tank : MonoBehaviour
                 }
             }
 
-            //player 1 left and right movement
-            if (Input.GetKey("l")) //right
+            //player needs gas left to move
+            if (moveTime > 0)
             {
-                direction = 1;
+                //player 1 left and right movement
+                if (Input.GetKey("l")) //right
+                {
+                    direction = 1;
+                    UseGas();
+                }
+                else if (Input.GetKey("j")) //left
+                {
+                    direction = -1;
+                    UseGas();
+                }
+                else //no input
+                {
+                    direction = 0;
+                }
             }
-            else if (Input.GetKey("j")) //left
-            {
-                direction = -1;
-            }
-            else //no input
+            else //out of gas
             {
                 direction = 0;
             }
@@ -104,6 +141,12 @@ public class Tank : MonoBehaviour
             Shoot();
             //cycle turn
             playerOneTurn = !playerOneTurn;
+
+            //set gas back to full
+            moveTime = 3f;
+            playerOneGasBar.value = moveTime;
+            playerTwoGasBar.value = moveTime;
+
             UpdateTurn();
         }
     }
@@ -144,6 +187,21 @@ public class Tank : MonoBehaviour
         else if (!playerOneTurn)
         {
             turnText.text = "Player 2 Turn";
+        }
+    }
+
+    void UseGas()
+    {
+        moveTime -= Time.deltaTime;
+
+        //update gas meter UI
+        if (playerOneTurn)
+        {
+            playerOneGasBar.value = moveTime;
+        }
+        else if (!playerOneTurn)
+        {
+            playerTwoGasBar.value = moveTime;
         }
     }
 }

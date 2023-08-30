@@ -11,9 +11,13 @@ public class Projectile : MonoBehaviour
     //access tank controller script
     Tank tank;
 
+    //access money script
+    PlayerMoney playerMoney;
+
     void Awake()
     {
         tank = GameObject.Find("Tank 1").GetComponent<Tank>();
+        playerMoney = GameObject.Find("Tank 1").GetComponent<PlayerMoney>();
     }
 
     void FixedUpdate()
@@ -27,10 +31,13 @@ public class Projectile : MonoBehaviour
         GameObject collisionGameObject = collision.gameObject;
         string selfName = gameObject.name;
         
-        //deal damage to target
+        //deal damage to target if it hits a player
         if (collisionGameObject.GetComponent<PlayerHealth>() != null)
         {
             collisionGameObject.GetComponent<PlayerHealth>().TakeDamage(damage);
+
+            //get some money for hitting target
+            playerMoney.GiveMoney(10);
         }
 
         //destroy self

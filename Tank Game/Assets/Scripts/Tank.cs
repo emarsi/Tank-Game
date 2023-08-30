@@ -39,6 +39,9 @@ public class Tank : MonoBehaviour
     //track if projectile is active to see if players can move yet
     public bool shotActive = false;
 
+    //access money script
+    PlayerMoney playerMoney;
+
     void Start()
     {
         //set gas meters
@@ -47,6 +50,9 @@ public class Tank : MonoBehaviour
 
         playerTwoGasBar.maxValue = moveTime;
         playerTwoGasBar.value = moveTime;
+
+        //access money script
+        playerMoney = GetComponent<PlayerMoney>();
     }
 
     // Update is called once per frame
@@ -189,6 +195,9 @@ public class Tank : MonoBehaviour
             Instantiate(bullet, firePoint2.position, firePoint2.rotation);
         }
         shotActive = true;
+
+        //player gets some money for each shot
+        playerMoney.GiveMoney(5);
     }
 
     void UpdateTurn()

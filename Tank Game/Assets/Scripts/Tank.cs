@@ -32,7 +32,7 @@ public class Tank : MonoBehaviour
     public Slider playerTwoGasBar;
 
     //track player turn
-    bool playerOneTurn = true;
+    public bool playerOneTurn = true;
 
     public TMP_Text turnText;
 
@@ -151,15 +151,11 @@ public class Tank : MonoBehaviour
             if (Input.GetKeyDown("space"))
             {
                 Shoot();
-                //cycle turn
-                playerOneTurn = !playerOneTurn;
 
                 //set gas back to full
                 moveTime = 3f;
                 playerOneGasBar.value = moveTime;
                 playerTwoGasBar.value = moveTime;
-
-                UpdateTurn();
             }
         }
         else //stop any current movement while shot is active
@@ -200,7 +196,7 @@ public class Tank : MonoBehaviour
         playerMoney.GiveMoney(5);
     }
 
-    void UpdateTurn()
+    public void UpdateTurn()
     {
         if (playerOneTurn)
         {

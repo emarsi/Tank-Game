@@ -43,8 +43,12 @@ public class Projectile : MonoBehaviour
         //destroy self
         Destroy(gameObject);
 
-        //set shot to inactive so players may move
+        //set shot to inactive so players may move and swap turns
         tank.shotActive = false;
+        //change turn here so money on hit goes to correct player
+        tank.playerOneTurn = !tank.playerOneTurn; 
+        //updates player turn indicator on HUD
+        tank.UpdateTurn();
 
         //TODO create big explosion
     }

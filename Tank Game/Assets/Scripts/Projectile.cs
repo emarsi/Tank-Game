@@ -18,6 +18,15 @@ public class Projectile : MonoBehaviour
     {
         tank = GameObject.Find("Tank 1").GetComponent<Tank>();
         playerMoney = GameObject.Find("Tank 1").GetComponent<PlayerMoney>();
+
+        if (tank.playerOneTurn)
+        {
+            speed = (tank.playerOneStrength * 3);
+        }
+        else
+        {
+            speed = (tank.playerTwoStrength * 3);
+        }
     }
 
     void FixedUpdate()

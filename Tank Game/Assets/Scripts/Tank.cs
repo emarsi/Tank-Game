@@ -42,6 +42,18 @@ public class Tank : MonoBehaviour
     //access money script
     PlayerMoney playerMoney;
 
+    //store shot strength for each player (bullet speed = strength * 3)
+    public int playerOneStrength = 3;
+    public int playerTwoStrength = 3;
+
+    int maxStrength = 5;
+    int minStrength = 1;
+
+    public Gradient gradient;
+    public Slider playerOneStrengthBar;
+    public Image playerOneStrengthBarColour;
+    //public Image playerTwoStrengthBar;
+
     void Start()
     {
         //set gas meters
@@ -53,6 +65,11 @@ public class Tank : MonoBehaviour
 
         //access money script
         playerMoney = GetComponent<PlayerMoney>();
+
+        //set up strength bars
+        playerOneStrengthBar.maxValue = maxStrength;
+        playerOneStrengthBar.value = playerOneStrength;
+        playerOneStrengthBarColour.color = gradient.Evaluate(playerOneStrength * 0.2f);
     }
 
     // Update is called once per frame
@@ -103,7 +120,27 @@ public class Tank : MonoBehaviour
                 {
                     direction = 0;
                 }
+                //control shot strength
+                if (Input.GetKeyDown("e")) //increase
+                {
+                    //ensure player cannot increase past max strength
+                    if (playerOneStrength < maxStrength)
+                    {
+                        playerOneStrength++;
+                        UpdateStrengthBar();
+                    }
+                }
+                if (Input.GetKeyDown("q")) //decrease
+                {
+                    //ensure player cannot decrease past min strength
+                    if (playerOneStrength > minStrength)
+                    {
+                        playerOneStrength--;
+                        UpdateStrengthBar();
+                    }
+                }
             }
+            //player 2 controls
             else if (!playerOneTurn)
             {
                 //player 2 turret up/down movement
@@ -144,6 +181,23 @@ public class Tank : MonoBehaviour
                 else //out of gas
                 {
                     direction = 0;
+                }
+                //control shot strength
+                if (Input.GetKeyDown("u")) //increase
+                {
+                    //ensure player cannot increase past max strength
+                    if (playerTwoStrength < maxStrength)
+                    {
+                        playerTwoStrength++;
+                    }
+                }
+                if (Input.GetKeyDown("o")) //decrease
+                {
+                    //ensure player cannot decrease past min strength
+                    if (playerTwoStrength > minStrength)
+                    {
+                        playerTwoStrength--;
+                    }
                 }
             }
 
@@ -221,5 +275,11 @@ public class Tank : MonoBehaviour
         {
             playerTwoGasBar.value = moveTime;
         }
+    }
+
+    void UpdateStrengthBar()
+    {
+        playerOneStrengthBarColour.color = gradient.Evaluate(playerOneStrength * 0.2f);
+        playerOneStrengthBar.value = playerOneStrength;
     }
 }

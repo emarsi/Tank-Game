@@ -14,18 +14,22 @@ public class Projectile : MonoBehaviour
     //access money script
     PlayerMoney playerMoney;
 
+    //access shot strength script
+    ShotStrength shotStrength;
+
     void Awake()
     {
         tank = GameObject.Find("Tank 1").GetComponent<Tank>();
         playerMoney = GameObject.Find("Tank 1").GetComponent<PlayerMoney>();
+        shotStrength = GameObject.Find("EventSystem").GetComponent<ShotStrength>();
 
         if (tank.playerOneTurn)
         {
-            speed = (tank.playerOneStrength * 3);
+            speed = (shotStrength.playerOneStrength * 3);
         }
         else
         {
-            speed = (tank.playerTwoStrength * 3);
+            speed = (shotStrength.playerTwoStrength * 3);
         }
     }
 

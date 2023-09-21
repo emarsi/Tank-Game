@@ -37,7 +37,7 @@ public class PlayerMoney : MonoBehaviour
 
     public void SpendMoney(int money)
     {
-        //playerMoney -= money;
+        playerOneMoney -= money;
         UpdateMoney();
     }
 

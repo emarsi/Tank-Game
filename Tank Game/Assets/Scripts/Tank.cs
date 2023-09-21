@@ -42,21 +42,13 @@ public class Tank : MonoBehaviour
     //access money script
     PlayerMoney playerMoney;
 
-    //store shot strength for each player (bullet speed = strength * 3)
-    //public int playerOneStrength = 3;
-    //public int playerTwoStrength = 3;
-
-    /*
-    int maxStrength = 5;
-    int minStrength = 1;
-
-    public Gradient gradient;
-    public Slider playerOneStrengthBar;
-    public Image playerOneStrengthBarColour;
-    */
-
     //access script for modifying shot strength
     ShotStrength shotStrength;
+
+    //Store iventory of different bullets
+    public int playerOneSplit = 0;
+    int playerOneFreeze = 0;
+    int playerOneTeleport = 0;
 
     void Start()
     {
@@ -72,13 +64,7 @@ public class Tank : MonoBehaviour
 
         //shot strength script
         shotStrength = GameObject.Find("EventSystem").GetComponent<ShotStrength>();
-
-        //set up strength bars 
-        /*
-        playerOneStrengthBar.maxValue = maxStrength;
-        playerOneStrengthBar.value = playerOneStrength;
-        playerOneStrengthBarColour.color = gradient.Evaluate(playerOneStrength * 0.2f);
-        */
+        
     }
 
     // Update is called once per frame
@@ -135,9 +121,6 @@ public class Tank : MonoBehaviour
                     //ensure player cannot increase past max strength
                     if (shotStrength.playerOneStrength < shotStrength.maxStrength)
                     {
-                        //playerOneStrength++;
-                        //UpdateStrengthBar();
-
                         //send turn and value to change by
                         shotStrength.playerStrengthChange(playerOneTurn, 1);
 
@@ -148,8 +131,6 @@ public class Tank : MonoBehaviour
                     //ensure player cannot decrease past min strength
                     if (shotStrength.playerOneStrength > shotStrength.minStrength)
                     {
-                        //playerOneStrength--;
-                        //UpdateStrengthBar();
                         shotStrength.playerStrengthChange(playerOneTurn, -1);
                     }
                 }
@@ -202,7 +183,6 @@ public class Tank : MonoBehaviour
                     //ensure player cannot increase past max strength
                     if (shotStrength.playerTwoStrength < shotStrength.maxStrength)
                     {
-                        //playerTwoStrength++;
                         shotStrength.playerStrengthChange(playerOneTurn, 1);
                     }
                 }
@@ -211,7 +191,6 @@ public class Tank : MonoBehaviour
                     //ensure player cannot decrease past min strength
                     if (shotStrength.playerTwoStrength > shotStrength.minStrength)
                     {
-                        //playerTwoStrength--;
                         shotStrength.playerStrengthChange(playerOneTurn, -1);
                     }
                 }
@@ -292,11 +271,4 @@ public class Tank : MonoBehaviour
             playerTwoGasBar.value = moveTime;
         }
     }
-    /*
-    void UpdateStrengthBar()
-    {
-        playerOneStrengthBarColour.color = gradient.Evaluate(playerOneStrength * 0.2f);
-        playerOneStrengthBar.value = playerOneStrength;
-    }
-    */
 }

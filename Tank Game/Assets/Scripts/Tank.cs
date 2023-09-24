@@ -45,10 +45,16 @@ public class Tank : MonoBehaviour
     //access script for modifying shot strength
     ShotStrength shotStrength;
 
-    //Store iventory of different bullets
+    //store iventory of different bullets
     public int playerOneSplit = 0;
     int playerOneFreeze = 0;
     int playerOneTeleport = 0;
+
+    //track currently selected bullet (1 = basic, 2 = split)
+    int ammoType = 1;
+
+    //ammo type UI
+    public TMP_Text ammoTypeText;
 
     void Start()
     {
@@ -133,6 +139,27 @@ public class Tank : MonoBehaviour
                     {
                         shotStrength.playerStrengthChange(playerOneTurn, -1);
                     }
+                }
+                //change ammo types
+                if (Input.GetKeyDown("1"))
+                {
+                    ammoType = 1;
+                    UpdateAmmoType();
+                }
+                if (Input.GetKeyDown("2"))
+                {
+                    ammoType = 2;
+                    UpdateAmmoType();
+                }
+                if (Input.GetKeyDown("3"))
+                {
+                    ammoType = 3;
+                    UpdateAmmoType();
+                }
+                if (Input.GetKeyDown("4"))
+                {
+                    ammoType = 4;
+                    UpdateAmmoType();
                 }
             }
             //player 2 controls
@@ -269,6 +296,26 @@ public class Tank : MonoBehaviour
         else if (!playerOneTurn)
         {
             playerTwoGasBar.value = moveTime;
+        }
+    }
+
+    void UpdateAmmoType()
+    {
+        if (ammoType == 1)
+        {
+            ammoTypeText.text = "Basic: \u221E"; //infinite basic ammo
+        }
+        else if (ammoType == 2)
+        {
+            ammoTypeText.text = "Split: " + playerOneSplit;
+        }
+        else if (ammoType == 3)
+        {
+            ammoTypeText.text = "Freeze: " + playerOneFreeze;
+        }
+        else if (ammoType == 4)
+        {
+            ammoTypeText.text = "Teleport: " + playerOneTeleport;
         }
     }
 }

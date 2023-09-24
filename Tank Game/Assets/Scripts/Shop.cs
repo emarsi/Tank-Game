@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Shop : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class Shop : MonoBehaviour
     Tank tank;
 
     int price = 25;
+
+    //change inventory in shop
+    public TMP_Text splitInventory;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +28,12 @@ public class Shop : MonoBehaviour
         {
             tank.playerOneSplit++;
             playerMoney.SpendMoney(price);
+            UpdateInventory();
         }
+    }
+
+    void UpdateInventory()
+    {
+        splitInventory.text = "Inv: " + tank.playerOneSplit;
     }
 }

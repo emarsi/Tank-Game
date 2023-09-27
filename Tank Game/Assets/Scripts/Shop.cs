@@ -9,6 +9,7 @@ public class Shop : MonoBehaviour
     //access other scripts
     PlayerMoney playerMoney;
     Tank tank;
+    Inventory inventory;
 
     int price = 25;
 
@@ -20,13 +21,14 @@ public class Shop : MonoBehaviour
     {
         playerMoney = GameObject.Find("Tank 1").GetComponent<PlayerMoney>();
         tank = GameObject.Find("Tank 1").GetComponent<Tank>();
+        inventory = GameObject.Find("Tank 1").GetComponent<Inventory>();
     }
 
     public void Purchase()
     {
         if (playerMoney.playerOneMoney >= price)
         {
-            tank.playerOneSplit++;
+            inventory.Split++;
             playerMoney.SpendMoney(price);
             UpdateInventory();
         }
@@ -34,6 +36,6 @@ public class Shop : MonoBehaviour
 
     void UpdateInventory()
     {
-        splitInventory.text = "Inv: " + tank.playerOneSplit;
+        splitInventory.text = "Inv: " + inventory.Split;
     }
 }

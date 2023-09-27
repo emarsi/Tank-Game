@@ -45,16 +45,11 @@ public class Tank : MonoBehaviour
     //access script for modifying shot strength
     ShotStrength shotStrength;
 
-    //store iventory of different bullets
-    public int playerOneSplit = 0;
-    int playerOneFreeze = 0;
-    int playerOneTeleport = 0;
-
+    //access inventory script for ammo swapping
+    Inventory inventory;
+    
     //track currently selected bullet (1 = basic, 2 = split)
     int ammoType = 1;
-
-    //ammo type UI
-    public TMP_Text ammoTypeText;
 
     void Start()
     {
@@ -70,7 +65,8 @@ public class Tank : MonoBehaviour
 
         //shot strength script
         shotStrength = GameObject.Find("EventSystem").GetComponent<ShotStrength>();
-        
+
+        inventory = GetComponent<Inventory>();
     }
 
     // Update is called once per frame
@@ -144,22 +140,22 @@ public class Tank : MonoBehaviour
                 if (Input.GetKeyDown("1"))
                 {
                     ammoType = 1;
-                    UpdateAmmoType();
+                    inventory.UpdateAmmoType(1);
                 }
                 if (Input.GetKeyDown("2"))
                 {
                     ammoType = 2;
-                    UpdateAmmoType();
+                    inventory.UpdateAmmoType(2);
                 }
                 if (Input.GetKeyDown("3"))
                 {
                     ammoType = 3;
-                    UpdateAmmoType();
+                    inventory.UpdateAmmoType(3);
                 }
                 if (Input.GetKeyDown("4"))
                 {
                     ammoType = 4;
-                    UpdateAmmoType();
+                    inventory.UpdateAmmoType(4);
                 }
             }
             //player 2 controls
@@ -221,17 +217,45 @@ public class Tank : MonoBehaviour
                         shotStrength.playerStrengthChange(playerOneTurn, -1);
                     }
                 }
+                //change ammo types
+                if (Input.GetKeyDown("7"))
+                {
+                    ammoType = 1;
+                    inventory.UpdateAmmoType(1);
+                }
+                if (Input.GetKeyDown("8"))
+                {
+                    ammoType = 2;
+                    inventory.UpdateAmmoType(2);
+                }
+                if (Input.GetKeyDown("9"))
+                {
+                    ammoType = 3;
+                    inventory.UpdateAmmoType(3);
+                }
+                if (Input.GetKeyDown("0"))
+                {
+                    ammoType = 4;
+                    inventory.UpdateAmmoType(4);
+                }
             }
 
             //shoot 
             if (Input.GetKeyDown("space"))
             {
-                Shoot();
-
-                //set gas back to full
-                moveTime = 3f;
-                playerOneGasBar.value = moveTime;
-                playerTwoGasBar.value = moveTime;
+                //spend ammo if needed
+                if (ammoType != 1)
+                {
+                    //only shoot if player has anough ammo to fire
+                    if (inventory.CheckAmmo(ammoType))
+                    {
+                        Shoot(/*ammo type here*/);
+                    }
+                }
+                else if (ammoType == 1)
+                {
+                    Shoot(/*ammo type here*/);
+                }
             }
         }
         else //stop any current movement while shot is active
@@ -270,6 +294,11 @@ public class Tank : MonoBehaviour
 
         //player gets some money for each shot
         playerMoney.GiveMoney(5);
+
+        //set gas back to full
+        moveTime = 3f;
+        playerOneGasBar.value = moveTime;
+        playerTwoGasBar.value = moveTime;
     }
 
     public void UpdateTurn()
@@ -296,26 +325,6 @@ public class Tank : MonoBehaviour
         else if (!playerOneTurn)
         {
             playerTwoGasBar.value = moveTime;
-        }
-    }
-
-    void UpdateAmmoType()
-    {
-        if (ammoType == 1)
-        {
-            ammoTypeText.text = "Basic: \u221E"; //infinite basic ammo
-        }
-        else if (ammoType == 2)
-        {
-            ammoTypeText.text = "Split: " + playerOneSplit;
-        }
-        else if (ammoType == 3)
-        {
-            ammoTypeText.text = "Freeze: " + playerOneFreeze;
-        }
-        else if (ammoType == 4)
-        {
-            ammoTypeText.text = "Teleport: " + playerOneTeleport;
         }
     }
 }

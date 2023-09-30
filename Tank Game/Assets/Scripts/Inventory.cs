@@ -8,8 +8,8 @@ public class Inventory : MonoBehaviour
 {
     //store iventory of different bullets
     public int Split = 0;
-    int Freeze = 0;
-    int Teleport = 0;
+    public int Freeze = 0;
+    public int Teleport = 0;
 
     //ammo type UI
     public TMP_Text ammoTypeText;
